@@ -1,0 +1,36 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath("org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin:${kotlinVersion}")
+  }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'expo-module-gradle-plugin'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
+
+group = 'expo.modules.arplacement'
+version = '1.0.0'
+
+android {
+  namespace "expo.modules.arplacement"
+  defaultConfig {
+    versionCode 1
+    versionName "1.0.0"
+  }
+  buildFeatures {
+    compose true
+  }
+}
+
+dependencies {
+  implementation 'com.facebook.react:react-android'
+  // Same Compose versions as @expo/ui, so the app resolves one copy
+  implementation 'androidx.compose.foundation:foundation-android:1.12.1'
+  implementation 'androidx.compose.ui:ui-android:1.12.1'
+  // 4.16.x is the newest line built with Kotlin 2.3, which the app's Kotlin
+  // 2.2 compiler can still read; 4.20+ needs Kotlin 2.4
+  implementation 'io.github.sceneview:arsceneview:4.16.10'
+}

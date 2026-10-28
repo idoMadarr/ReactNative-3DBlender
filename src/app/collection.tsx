@@ -1,5 +1,7 @@
+import { router } from "expo-router";
 import { useEffect, useRef, useState, type ComponentRef } from "react";
 import {
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -20,6 +22,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { getAvailabilityAsync } from "../../modules/ar-placement";
 import { ModelViewer } from "../components/model-viewer";
 import { MODELS, type ModelEntry } from "../constants/models";
 
@@ -56,6 +59,7 @@ export default function CollectionScreen() {
   const insets = useSafeAreaInsets();
   const [index, setIndex] = useState(0);
   const stripRef = useRef<ComponentRef<typeof ScrollView>>(null);
+  const canPlaceInAr = useArSupport();
 
   const model = MODELS[index];
 
@@ -133,6 +137,19 @@ export default function CollectionScreen() {
         >
           Drag to rotate
         </Text>
+        {canPlaceInAr && (
+          <Pressable
+            onPress={() =>
+              router.push({ pathname: "/ar/[id]", params: { id: model.id } })
+            }
+            hitSlop={8}
+            style={[styles.arButton, { backgroundColor: theme.surface }]}
+          >
+            <Text style={[styles.arButtonLabel, { color: theme.text }]}>
+              Place in AR
+            </Text>
+          </Pressable>
+        )}
       </Animated.View>
 
       <Animated.View
@@ -172,6 +189,20 @@ export default function CollectionScreen() {
       </ScrollView>
     </View>
   );
+}
+
+/** Whether this phone can place models in AR; ARCore is Android only */
+function useArSupport() {
+  const [supported, setSupported] = useState(false);
+  useEffect(() => {
+    if (Platform.OS !== "android") return;
+    getAvailabilityAsync().then((availability) =>
+      setSupported(
+        availability === "supported" || availability === "needsInstall",
+      ),
+    );
+  }, []);
+  return supported;
 }
 
 function ModelCard({
@@ -314,6 +345,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 0.5,
   },
+  arButton: {
+    position: "absolute",
+    top: 16,
+    right: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    borderRadius: 18,
+  },
+  arButtonLabel: { fontSize: 13, fontWeight: "600" },
   controls: {
     flexDirection: "row",
     alignItems: "center",
