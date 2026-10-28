@@ -1,10 +1,13 @@
 import { Stack } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import { AnimatedSplash } from '../components/animated-splash';
+
 export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack screenOptions={{ headerShown: false }} />
+      <AnimatedSplash />
     </GestureHandlerRootView>
   );
 }

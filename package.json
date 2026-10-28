@@ -1,5 +1,5 @@
 {
-  "name": "3d",
+  "name": "hunyuan_3d",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "dependencies": {
@@ -8,6 +8,7 @@
     "@react-three/fiber": "^9.8.2",
     "expo": "~58.0.19",
     "expo-asset": "~58.0.18",
+    "expo-build-properties": "~58.0.11",
     "expo-constants": "~58.0.13",
     "expo-device": "~58.0.5",
     "expo-file-system": "~58.0.11",
@@ -42,8 +43,8 @@
   },
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "expo lint"
   },
